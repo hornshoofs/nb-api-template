@@ -8,3 +8,4 @@ on:
 jobs:
   call-common-workflow:
     uses: hornshoofs/nb-pipelines/.github/workflows/build-pipeline.yaml@main
+    secrets: inherit
