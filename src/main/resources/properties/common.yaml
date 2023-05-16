@@ -1,0 +1,15 @@
+api:
+  version: "v1"
+
+http:
+  host: "0.0.0.0"
+  port: "8081"
+  path: "/*"
+
+  
+keystore:
+  path: "cert/keystore.p12"
+  alias: "mule"
+  
+formats:
+  date: "yyyy-MM-dd'T'HH:mm:ss.SSSZ" 

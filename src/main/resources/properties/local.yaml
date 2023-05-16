@@ -1,0 +1,8 @@
+#This file contents local environment-dependent properties
+#The API ID in API Manager    
+api:
+  id: "12345"
+#
+#Keystory configurations
+keystore:
+  password: "![wWyDHfBWoXajLxEOV3oLv1IZj6l0CDhphoWT0jQ8Ncs=]"

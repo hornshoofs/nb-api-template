@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="global-prepare-log-message-sub-flow" doc:id="5073132f-1e86-4a92-a13d-d25b1419f88a" >
+		<ee:transform doc:name="Initialize Log Message" doc:id="dff112a9-176c-44b3-9353-3d9f555d45c1" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="logMessage" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	applicationName: p('app.name'),
+	applicationVersion: p('api.version'),
+	environment: p('mule.env'),
+	correlationId: correlationId,
+	flow: flow.name,
+	message: "",
+	timestamp: (now() as String { format: p('formats.date') }),
+	additionalInfo: {
+		
+	}
+}]]></ee:set-variable>
+				<ee:set-variable variableName="requestMethod" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.method]]></ee:set-variable>
+				<ee:set-variable variableName="requestPath" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.requestPath replace  /\/v[0-9]+/ with ""]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

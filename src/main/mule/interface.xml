@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd">
+    <flow name="template-order-api-main">
+        <http:listener config-ref="HTTP_Listener_Config" path="${http.path}">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <flow-ref doc:name="global-prepare-log-message-sub-flow" doc:id="a866126a-00ad-48d0-a340-70b32cb8921d" name="global-prepare-log-message-sub-flow" />
+        <apikit:router config-ref="template-order-api-config" />
+        <error-handler ref="global-error-handler" />
+    </flow>
+    <flow name="get:\orders:template-order-api-config">
+        <logger level="INFO" doc:name="Start flow" doc:id="117aa642-e62f-4b15-8428-a0641a789135" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;vars.logMessage update {&#xA; case f at .flow -&gt; flow.name&#xA; case message at .message -&gt; (&quot;Start flow &quot; ++ vars.requestMethod ++ &quot; &quot; ++ vars.requestPath)&#xA; case timestamp at .timestamp -&gt; (now() as String { format: p('formats.date') })&#xA;}]" />
+        <ee:transform doc:name="Create Response">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    id: "200640009b60366e",
+    name: "My Order 1"
+  }, 
+  {
+    id: "200640009b60367a",
+    name: "My Order 2"
+  }
+]]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="End flow" doc:id="0ab3b85e-25f7-4610-b26f-05c072f17d8c" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;vars.logMessage update {&#xA; case f at .flow -&gt; flow.name&#xA; case message at .message -&gt; (&quot;End flow &quot; ++ vars.requestMethod ++ &quot; &quot; ++ vars.requestPath)&#xA; case timestamp at .timestamp -&gt; (now() as String { format: p('formats.date') })&#xA;}]" />
+    </flow>
+    <flow name="get:\status:template-order-api-config">
+        <logger level="INFO" doc:name="Start flow" doc:id="78fd765b-5091-4d73-ac3e-95b909f38fc3" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;vars.logMessage update {&#xA; case f at .flow -&gt; flow.name&#xA; case message at .message -&gt; (&quot;Start flow &quot; ++ vars.requestMethod ++ &quot; &quot; ++ vars.requestPath)&#xA; case timestamp at .timestamp -&gt; (now() as String { format: p('formats.date') })&#xA;}]" />
+        <flow-ref doc:name="get-api-status-subflow" doc:id="af4b8bf7-327a-4722-8e20-5d296d88f1a4" name="get-api-status-subflow"/>
+		<logger level="INFO" doc:name="End flow" doc:id="67b3455a-1a5a-4ea1-afe2-80970cd03551" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;vars.logMessage update {&#xA; case f at .flow -&gt; flow.name&#xA; case message at .message -&gt; (&quot;End flow &quot; ++ vars.requestMethod ++ &quot; &quot; ++ vars.requestPath)&#xA; case timestamp at .timestamp -&gt; (now() as String { format: p('formats.date') })&#xA;}]" />
+    </flow>
+    <flow name="get:\orders\(id):template-order-api-config">
+        <logger level="INFO" doc:name="Start flow" doc:id="35351eed-0fa6-4224-ada6-9a15d27f9f33" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;vars.logMessage update {&#xA; case f at .flow -&gt; flow.name&#xA; case message at .message -&gt; (&quot;Start flow &quot; ++ vars.requestMethod ++ &quot; &quot; ++ vars.requestPath)&#xA; case timestamp at .timestamp -&gt; (now() as String { format: p('formats.date') })&#xA;}]" />
+        <ee:transform doc:name="Create Response">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  id: "200640009b60366e",
+  name: "My Order"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <ee:transform doc:name="Raise EXPRESSION Error">
+            <ee:variables>
+                <ee:set-variable variableName="id"><![CDATA[attributes.uriParams.'id']]></ee:set-variable>
+                <ee:set-variable variableName="test"><![CDATA[%dw 2.0
+output application/java
+---
+5 / 0]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" doc:name="End flow" doc:id="4274c50d-3ccd-447d-b466-3c30daab26e4" message="#[%dw 2.0&#xA;output application/json&#xA;---&#xA;vars.logMessage update {&#xA; case f at .flow -&gt; flow.name&#xA; case message at .message -&gt; (&quot;End flow &quot; ++ vars.requestMethod ++ &quot; &quot; ++ vars.requestPath)&#xA; case timestamp at .timestamp -&gt; (now() as String { format: p('formats.date') })&#xA;}]" />
+        <error-handler>
+            <on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="223e5852-95ee-452d-bf9c-692c41c44d8a" type="EXPRESSION">
+                <ee:transform doc:name="Set HTTP Status Code Error Parameters" doc:id="781502f4-aa61-44f1-8c55-1a45033fbb1e">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="errorCode"><![CDATA[%dw 2.0
+output application/java
+---
+"MAPPING ERROR"]]></ee:set-variable>
+                        <ee:set-variable variableName="errorMessage"><![CDATA[%dw 2.0
+output application/java
+---
+"Error during message transformation"]]></ee:set-variable>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+                <flow-ref doc:name="global-prepare-error-response-sub-flow" doc:id="43d8df56-d4c6-4d92-9f15-e39e9e136ffd" name="global-prepare-error-response-sub-flow" />
+            </on-error-continue>
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="17302436-13b8-4c65-9c95-85d4992ce3d8" type="ANY">
+                <ee:transform doc:name="Set Error Parameters" doc:id="3b98cda1-41ab-41c0-a79c-a8447d5189ec">
+                    <ee:message />
+                    <ee:variables>
+                        <ee:set-variable variableName="errorCode"><![CDATA[%dw 2.0
+output application/java
+---
+"Test ERROR"]]></ee:set-variable>
+                        <ee:set-variable variableName="errorMessage"><![CDATA[%dw 2.0
+output application/java
+---
+"Unknown Error"]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+</mule>

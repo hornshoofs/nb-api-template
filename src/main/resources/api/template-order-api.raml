@@ -1,0 +1,124 @@
+#%RAML 1.0
+title: Demo Order API
+version: v1
+baseUri: https://demoorderapi.eu1.cloudhub.io/api/{version}
+protocols: [ HTTPS  ] 
+
+mediaType: application/json
+
+securitySchemes:
+  basic_auth:
+    description: API Authentication by Basic Auth
+    type: Basic Authentication
+
+types:
+  Order:
+    type: object
+    displayName: Order object
+    description: Purchasing order object
+    properties:
+      id:
+        description: "id of order"
+        example: "200640009b60366e"
+        type: string
+        required: true
+      name:
+        description: "order name"
+        example: "New Order"
+        type: string
+        required: true
+  ErrorType:
+    type: object
+    displayName: API Error Datatype
+    properties:
+      errorCode: number
+      errorType: string
+      errorMessage: string
+      errorDetails?: string
+  AppStatus:
+    type: object
+    displayName: API Status Response
+    properties:
+      status: string
+      version: string
+      time: string
+
+
+traits:
+  errorResponse:
+    responses:
+      400:
+        body:
+          type: ErrorType
+          example:
+            errorCode: 400
+            errorType: "Bad request"
+            errorMessage: "Incoming request to the API is not valid"
+      401:
+        body:
+          type: ErrorType
+          example:
+            errorCode: 401
+            errorType: "Unauthorized"
+            errorMessage: "No credentials are provided, or the provided credentials are refused"
+/status:
+  is:
+    - errorResponse
+  securedBy:
+    - basic_auth
+  description: This resource provides the metadata of the API as a response when called.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: AppStatus
+            example: |
+                {
+                   "status": "OK",
+                   "version": "v1",
+                   "time": "2015-08-19T15:10:16Z"
+                }
+    
+
+/orders:
+  is:
+    - errorResponse
+  securedBy:
+    - basic_auth
+  description: |
+    Working with orders:
+    * Retrieving all orders
+    * Retrieving order by id
+  get:
+    displayName: Get orders
+    responses:
+      200:
+        body:
+          application/json:
+            type: Order[]
+            example:
+              -
+                id: "200640009b60366e"
+                name: "My Order 1"
+              -
+                id: "200640009b60367a"
+                name: "My Order 2"
+  /{id}:
+    is:
+    - errorResponse
+    securedBy:
+    - basic_auth
+    get:      
+      displayName: Get order
+      responses:
+        200:
+          body:
+            application/json:
+              type: Order
+              example:
+                id: "200640009b60366e"
+                name: "My Order"
+                
+
+

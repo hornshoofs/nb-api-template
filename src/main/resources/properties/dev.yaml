@@ -1,0 +1,8 @@
+#This file contents DEV environment-dependent properties
+#The API ID in API Manager    
+api:
+  id: " 18637285"
+#
+#Keystory configurations
+keystore:
+  password: "![mkfj0THie5h9brNnKDavOeaf/w2XlQZAvT04O9jetyY=]"

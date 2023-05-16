@@ -1,0 +1,8 @@
+#This file contents TEST environment-dependent properties
+#The API ID in API Manager    
+api:
+  id: "12345"
+#
+#Keystory configurations
+keystore:
+  password: "![r5+2vPE0sHxaBo7CUgP5REhI5DnVyFS4NVCT9B45vxY=]"

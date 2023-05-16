@@ -1,0 +1,8 @@
+#This file contents PROD environment-dependent properties
+#The API ID in API Manager    
+api:
+  id: "12345"
+#
+#Keystory configurations
+keystore:
+  password: "![W3e2wNhnYcQhAFFQ7OzqRrOdVTltonboVUPiXFCKGDg=]"
