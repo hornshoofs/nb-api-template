@@ -3,7 +3,7 @@ name: Build and Deploy to CH2.0
 on:
     push:
       branches: [main]
-    #workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
   call-common-workflow:
