@@ -4,7 +4,7 @@
 
 	<groupId>1a08e353-c78c-427b-af5a-6322d26bdda5</groupId>
 	<artifactId>nb-api-template</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>mule-application</packaging>
 
 	<name>nb-api-template</name>
