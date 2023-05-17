@@ -7,8 +7,5 @@ on:
 
 jobs:
   call-common-workflow:
-
-    environment: dev
-    
     uses: hornshoofs/nb-pipelines/.github/workflows/build-pipeline.yaml@main
     secrets: inherit
