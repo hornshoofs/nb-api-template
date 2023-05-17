@@ -221,7 +221,7 @@
 		<repository>
 			<id>AP-Repository</id>
 			<name>Exchange</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${project.groupId}/maven</url>
+			<url>https://maven.anypoint.mulesoft.com/api/v2/organizations/${project.groupId}/maven</url>
 		</repository>
 	</distributionManagement>
 
